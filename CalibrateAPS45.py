@@ -46,11 +46,11 @@ def CloseValves():
 def InitializeCalDataFile(machine):
     #Intialize Files
         #calibration specific data
-    calInfo = open('CalInfo_M_' + machine + '.txt', 'a+')
+    calInfo = open('CalInfo45_M_' + machine + '.txt', 'a+')
 
     return calInfo
 
-def WriteData(calInfo, machine, forceGain1, forceGain2 calData):
+def WriteData(calInfo, machine, forceGain1, forceGain2, calData):
     calInfo.write('Machine, ' + machine +'\n')
     calInfo.write('APS Positive Gain 90deg [N/count], ' + str(forceGain1) +'\n')
     calInfo.write('APS Positive Gain 45deg [N/count], ' + str(forceGain2) +'\n')
