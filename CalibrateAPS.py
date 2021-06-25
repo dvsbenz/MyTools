@@ -100,7 +100,7 @@ forceGain = (force[1]-force[0])/(counts[1]-counts[0])
 # print('Gain Force = ' + str(gainForce) + ' [N/count]')
 # print('Gain Press = ' + str(gainPres) + '[mmHg/count]')
 
-WriteData(calInfo, machine, forceGain, force, calData)
+WriteData(calInfo, machine, forceGain, calData)
 
 print('Calibration Complete')
 print('')
