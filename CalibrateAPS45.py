@@ -46,14 +46,13 @@ def CloseValves():
 def InitializeCalDataFile(machine):
     #Intialize Files
         #calibration specific data
-    calInfo = open('CalInfo45_M_' + machine + '.txt', 'a+')
+    calInfo = open('CalInfo_M_' + machine + '_45.txt', 'a+')
 
     return calInfo
 
-def WriteData(calInfo, machine, forceGain1, forceGain2, calData):
+def WriteData(calInfo, machine, forceGain1, calData):
     calInfo.write('Machine, ' + machine +'\n')
-    calInfo.write('APS Positive Gain 90deg [N/count], ' + str(forceGain1) +'\n')
-    calInfo.write('APS Positive Gain 45deg [N/count], ' + str(forceGain2) +'\n')
+    calInfo.write('APS Positive Gain [N/count], ' + str(forceGain1) +'\n')
     calInfo.write('250g, 0g\n')
 
     for k in range(len(calData[0,:])):
@@ -69,7 +68,7 @@ mass      = np.array([250.0, 0.0]) #Masses Used for Calibration
 numCounts = 20
 calData   = np.array([np.zeros(numCounts), np.zeros(numCounts)])  #Array that aps counts will be stored in
 counts    = np.zeros(len(mass))                                   #vector with average count for each mass
-force     = (mass/1000) * 9.81                                    #vector with the calibration forces in Newtons
+force     = (mass/1000) * 9.81 * np.cos(45*(np.pi/180))           #vector with the calibration forces in Newtons
 
 #IntializeNodes()                                                 #Initialize the Cassette Node
 valvePos = CloseValves()                                          #set valves to the closed position
@@ -96,13 +95,12 @@ for i in range(len(mass)):
 # print(counts)
 # print(calData)
 
-forceGain1 = (force[1]-force[0])/(counts[1]-counts[0])
-forceGain2 = ((force[1]-force[0])/(counts[1]-counts[0]))*np.cos(45)
+forceGain = (force[1]-force[0])/(counts[1]-counts[0])
 
 # print('Gain Force = ' + str(gainForce) + ' [N/count]')
 # print('Gain Press = ' + str(gainPres) + '[mmHg/count]')
 
-WriteData(calInfo, machine, forceGain1, forceGain2, calData)
+WriteData(calInfo, machine, forceGain, calData)
 
 print('Calibration Complete')
 print('')
