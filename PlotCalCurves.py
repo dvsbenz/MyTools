@@ -5,8 +5,7 @@ import numpy as np              #import numpy library
 from numpy import genfromtxt
 from numpy import loadtxt
 import scipy as sp              #import scipy library
-from scipy import stats
-from scipy.stats import norm   
+from scipy import stats   
 from scipy.optimize import curve_fit
 from scipy.signal import medfilt
 import matplotlib.pyplot as plt #import matplotlib
@@ -348,44 +347,26 @@ print('-350 mmHg')
 print('Mean = ' + str(np.mean(counts350)) + ' ... std = ' + str(np.std(counts350)))
 print(' Max = ' + str(np.amax(counts350)))	
 print(' Min = ' + str(np.amin(counts350)))
-print('')
 
 SlopesOrdered, CasNumLowHigh = OrderData(slopesPos, fileNames)
 
-#create normal probability plot
-n = np.zeros(len(SlopesOrdered))
-for i in range(len(SlopesOrdered)):
-	n[i] = i + 1
+count = 0
+for i in range(len(slopesPos)):
+	if slopesPos[i] > 1.004229 or slopesPos[i] < 0.994229:
+		count = count+1
 
-fi = (n-0.375)/(len(SlopesOrdered)+0.25)
-zVal = norm.ppf(fi)
+print('num cassettes = ' + str(count))
 
-linRegNormProb = np.zeros(5)
-linRegNormProb = linearRegression(SlopesOrdered, zVal, axLabels, title, plotData = False)
+#curveList1 = open('curveList1.txt', 'a+') #start new file or append to an exsisting. Appending to an exsisting file is undersireable 
+#curveList2 = open('curveList2.txt', 'a+')  
 
-print('n = ' + str(len(SlopesOrdered)) + '... 0.9784 ... 0.9850')
-print('r^2 = ' + str(linRegNormProb[2]))
-print('')
+#for i in range(len(SlopesOrdered)):
+#	print(str(SlopesOrdered[i]) + ' . . . ' + CasNumLowHigh[i])
+#	curveList1.write(str(SlopesOrdered[i]) + '\n')
+#	curveList2.write(CasNumLowHigh[i] + '\n')
 
-xaxis     = [SlopesOrdered, SlopesOrdered]
-yaxis     = [zVal, linRegNormProb[0]*SlopesOrdered + linRegNormProb[1]]
-lines     = ['r.', 'b--']
-axLabels  = ['Positive Gains [mmHg]', 'Z-Value']
-linLabels = ['Normal Probability Curve', 'Linear Regression']
-title     = 'Normal Probability Curve'
-PlotData(xaxis, yaxis, lines, axLabels, linLabels, title)
-
-curveList1 = open('curveList1.txt', 'a+') #start new file or append to an exsisting. Appending to an exsisting file is undersireable 
-curveList2 = open('curveList2.txt', 'a+')  
-
-for i in range(len(SlopesOrdered)):
- 	print(str(SlopesOrdered[i]) + ' . . . ' + CasNumLowHigh[i])
- 	curveList1.write(str(SlopesOrdered[i]) + '\n')
- 	curveList2.write(CasNumLowHigh[i] + '\n')
-
-curveList1.close()
-curveList2.close()
-
+#curveList1.close()
+#curveList2.close()
 # print('Low End Gain')
 # print(SlopesOrdered[0:5])
 # print(CasNumLowHigh[0:5])
